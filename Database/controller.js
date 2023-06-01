@@ -17,6 +17,7 @@ export async function getUsers(req,res){
     }
 }
 
+// GET: http://localhost:3000/api/users/someID
 export async function getUser(req, res){
     try {
         const {userId} = req.query;
@@ -56,9 +57,9 @@ export async function putUser(req,res){
 
         if(userId && formData){
             const user = await Users.findByIdAndUpdate(userId, formData);
-            res.status(200).json(user)
+            return res.status(200).json(user)
         }
-        res.status(404).json({message: 'Error updating user..'})
+        return res.status(404).json({message: 'Error updating user..'})
     } catch (error) {
         return res.status(404).json({error : 'Error updating data..'})
     }

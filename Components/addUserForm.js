@@ -12,19 +12,48 @@ const formReducer = (state,event)=>{
 function AddUserForm() {
     const [formData, setFormData] = useReducer(formReducer,{});
 
+    const postUser = async (userData)=>{
+      const resp = await fetch('http://localhost:3000/api/users', {
+        method: 'POST',
+        headers: {
+          'Content-type': 'application/json'
+        },
+        body: JSON.stringify(userData)
+
+      });
+      const data = await resp.json();
+      console.log(data);
+    }
     const handleSubmit = (e)=>{
         e.preventDefault();
         if(Object.keys(formData).length === 0){
             console.log('No Form Data')
         }
         else{
-            console.log(formData);
+            let reqObj = {};
+            let name = null;
+            console.log(formData)
+            Object.keys(formData).forEach((key)=>{
+              if(key.toLowerCase() === 'firstname'){
+                name=formData[key];
+                reqObj["name"] = name
+              }
+              else if(key.toLowerCase() === 'lastname'){
+                name+=" "+formData[key];
+                reqObj["name"] = name
+              }
+              else if(key.toLowerCase() !== 'firstname' || key.toLowerCase() !== 'lastname'){
+                reqObj[key] = formData[key];
+              }
+            });
+            console.log('Send req object to backend', reqObj)
+            postUser(reqObj);
         }
 
     }
-    if(Object.keys(formData).length > 0){
-        return <Success message={"Added"}></Success>
-    }
+    // if(Object.keys(formData).length > 0){
+    //     return <Success message={"Added"}></Success>
+    // }
 
   return (
    <>

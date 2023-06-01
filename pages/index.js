@@ -12,10 +12,12 @@ const inter = Inter({ subsets: ['latin'] })
 export const getStaticProps = async ()=>{
   const data = await fetch('http://localhost:3000/api/users');
   const users = await data.json();
+  console.log(users)
   return {
       props:{
           users
-      }
+      },
+      revalidate: 1, // regenerate the page after every 2s if there is any req coming into the server.
   }
 }
 
